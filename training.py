@@ -5,11 +5,13 @@ import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import Normalizer
 from sklearn.metrics import confusion_matrix,accuracy_score,precision_score,recall_score,f1_score,roc_auc_score,roc_curve,auc
+from sklearn.model_selection import train_test_split
 
 import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.utils import to_categorical
-from sklearn.model_selection import train_test_split
+
+import datetime
 
 def my_LSTM():
 	model = tf.keras.Sequential()
@@ -26,6 +28,8 @@ def my_LSTM():
 	model.compile(optimizer = tf.keras.optimizers.Adam(0.001),
 		loss = "binary_crossentropy",
 		metrics = ["binary_accuracy"])
+
+
 	return model
 
 def training_transform(df):
@@ -75,6 +79,7 @@ if __name__ == '__main__':
 
 	model = my_LSTM()
 	model.fit(X_train, Y_train, epochs = 10, batch_size = 64, validation_split = 0.2, verbose = 1)
+	model.summary()
 
 	pred = model.predict(X_test)
 	print('auc_roc', roc_auc_score(Y_test, pred[:,1]))
